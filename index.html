@@ -150,20 +150,7 @@
   .hero h1 .word.in { opacity: 1; transform: translateY(0); }
   @media (prefers-reduced-motion: reduce) { .hero h1 .word { opacity: 1; transform: none; transition: none; } }
 
-  /* SIZZLE 7 — Spine table row staggered reveal (rows slide in from left when section enters viewport) */
-  .spine-table tbody tr {
-    opacity: 0;
-    transform: translateX(-24px);
-    transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.2,0.8,0.2,1);
-  }
-  .spine-table.rows-in tbody tr { opacity: 1; transform: translateX(0); }
-  .spine-table.rows-in tbody tr:nth-child(1) { transition-delay: 0.05s; }
-  .spine-table.rows-in tbody tr:nth-child(2) { transition-delay: 0.18s; }
-  .spine-table.rows-in tbody tr:nth-child(3) { transition-delay: 0.31s; }
-  .spine-table.rows-in tbody tr:nth-child(4) { transition-delay: 0.44s; }
-  @media (prefers-reduced-motion: reduce) {
-    .spine-table tbody tr { opacity: 1; transform: none; transition: none; }
-  }
+  /* (Sizzle 7 — Spine row reveal — now lives inside the spine-rows block above) */
 
   /* SIZZLE 8 — Service cards 3D tilt on hover (cursor-tracking) */
   .service { transform-style: preserve-3d; transition: transform 0.18s cubic-bezier(0.2,0.8,0.2,1), box-shadow 0.25s ease, border-top-color 0.25s ease; }
@@ -348,20 +335,126 @@
   }
   .problem .synthesis em { font-style: normal; color: #FFB066; }
 
-  /* 6. SPINE TABLE */
+  /* 6. SPINE — Old game vs New game, with What Matters Now as the fulcrum.
+     STANDING RUBRIC 3 PATTERN: every HIT50 spec gets this 3-card-per-row treatment.
+     Left = past (faded), Center = dimension (the pivot), Right = future (vibrant). */
   .spine-block { padding: 96px 0; background: var(--paper); border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
   .spine-block .section-eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 18px; }
   .spine-block h2 { font-family: var(--serif); font-size: 42px; line-height: 1.15; letter-spacing: -0.014em; margin: 0 0 24px 0; font-weight: 700; max-width: 820px; }
-  .spine-block .spine-frame { font-size: 18px; color: var(--ink-muted); margin: 0 0 40px 0; max-width: 760px; line-height: 1.55; }
-  .spine-table { width: 100%; border-collapse: collapse; max-width: 1000px; }
-  .spine-table th { font-family: var(--sans); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; padding: 14px 18px; border-bottom: 2px solid var(--ink); text-align: left; font-weight: 700; }
-  .spine-table th.center { text-align: center; color: var(--accent); }
-  .spine-table th.old { color: var(--bad); }
-  .spine-table th.new { color: var(--good); }
-  .spine-table td { padding: 18px 18px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
-  .spine-table td.old { color: var(--ink-muted); font-size: 15px; }
-  .spine-table td.center { text-align: center; font-family: var(--serif); font-style: italic; color: var(--ink); font-size: 14px; font-weight: 500; }
-  .spine-table td.new { color: var(--ink); font-size: 15px; font-weight: 600; }
+  .spine-block .spine-frame { font-size: 18px; color: var(--ink-muted); margin: 0 0 48px 0; max-width: 760px; line-height: 1.55; }
+
+  /* Column keys (header strip above the rows) */
+  .spine-keys {
+    display: grid; grid-template-columns: 1fr 220px 1fr; gap: 18px;
+    padding: 0 0 18px 0; margin-bottom: 18px;
+    border-bottom: 1.5px solid var(--ink);
+  }
+  .spine-keys .key { font-family: var(--sans); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 800; padding: 0 26px; }
+  .spine-keys .key-old { color: var(--bad); }
+  .spine-keys .key-mid { color: var(--accent); text-align: center; padding: 0; }
+  .spine-keys .key-new { color: var(--good); text-align: right; }
+  .spine-keys .key-meta { display: block; font-size: 10px; font-weight: 500; letter-spacing: 0.02em; text-transform: none; opacity: 0.62; margin-top: 4px; font-style: italic; }
+
+  /* Rows — each row is OLD card + DIMENSION pivot + NEW card */
+  .spine-rows { display: flex; flex-direction: column; gap: 14px; }
+  .spine-row { display: grid; grid-template-columns: 1fr 220px 1fr; gap: 18px; align-items: stretch; }
+
+  .spine-cell {
+    padding: 24px 26px; border-radius: 10px;
+    font-family: var(--sans); font-size: 16px; line-height: 1.45;
+    display: flex; align-items: center;
+    transition: transform 0.32s cubic-bezier(0.2,0.8,0.2,1),
+                background 0.32s ease, color 0.32s ease,
+                box-shadow 0.32s ease, border-color 0.32s ease;
+  }
+  .spine-cell.old {
+    background: rgba(155,44,44,0.05);
+    color: var(--ink-muted);
+    font-weight: 500;
+    border-left: 3px solid rgba(155,44,44,0.35);
+    text-decoration: line-through;
+    text-decoration-color: rgba(155,44,44,0.32);
+    text-decoration-thickness: 1px;
+  }
+  .spine-cell.new {
+    background: rgba(250,125,0,0.07);
+    color: var(--ink);
+    font-weight: 700;
+    border-left: 3px solid var(--accent);
+  }
+
+  .spine-dim {
+    padding: 22px 18px;
+    background: var(--paper);
+    border: 1.5px solid var(--hairline);
+    border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    text-align: center;
+    transition: transform 0.32s cubic-bezier(0.2,0.8,0.2,1),
+                background 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease;
+  }
+  .spine-dim .dim-icon {
+    width: 48px; height: 48px; border-radius: 100px;
+    background: rgba(57,0,114,0.08);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.32s ease, transform 0.32s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .spine-dim .dim-icon svg {
+    width: 24px; height: 24px; color: var(--purple);
+    transition: color 0.32s ease;
+  }
+  .spine-dim .dim-label {
+    font-family: var(--sans); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    font-weight: 800; color: var(--ink); line-height: 1.2;
+    transition: color 0.32s ease;
+  }
+
+  /* Row hover — center dimension lights up, old fades further, new pops */
+  .spine-row { cursor: default; }
+  .spine-row:hover .spine-cell { transform: translateY(-3px); }
+  .spine-row:hover .spine-cell.old {
+    background: rgba(155,44,44,0.03);
+    color: rgba(91,87,80,0.55);
+    text-decoration-color: rgba(155,44,44,0.45);
+  }
+  .spine-row:hover .spine-cell.new {
+    background: rgba(250,125,0,0.14);
+    box-shadow: 0 10px 32px rgba(250,125,0,0.18);
+  }
+  .spine-row:hover .spine-dim {
+    transform: translateY(-3px) scale(1.04);
+    background: var(--paper);
+    border-color: var(--accent);
+    box-shadow: 0 12px 36px rgba(250,125,0,0.20);
+  }
+  .spine-row:hover .spine-dim .dim-icon {
+    background: var(--accent);
+    transform: scale(1.10);
+  }
+  .spine-row:hover .spine-dim .dim-icon svg { color: #FFFFFF; }
+  .spine-row:hover .spine-dim .dim-label { color: var(--accent); }
+
+  /* Reveal-on-scroll: each row slides in staggered */
+  .spine-rows .spine-row {
+    opacity: 0; transform: translateX(-20px);
+    transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .spine-rows.rows-in .spine-row { opacity: 1; transform: translateX(0); }
+  .spine-rows.rows-in .spine-row:nth-child(1) { transition-delay: 0.05s; }
+  .spine-rows.rows-in .spine-row:nth-child(2) { transition-delay: 0.18s; }
+  .spine-rows.rows-in .spine-row:nth-child(3) { transition-delay: 0.31s; }
+  .spine-rows.rows-in .spine-row:nth-child(4) { transition-delay: 0.44s; }
+  .spine-rows.rows-in .spine-row:nth-child(5) { transition-delay: 0.57s; }
+  .spine-rows.rows-in .spine-row:nth-child(6) { transition-delay: 0.70s; }
+  @media (prefers-reduced-motion: reduce) {
+    .spine-rows .spine-row { opacity: 1; transform: none; transition: none; }
+  }
+
+  @media (max-width: 880px) {
+    .spine-keys, .spine-row { grid-template-columns: 1fr; gap: 8px; }
+    .spine-keys .key-mid, .spine-keys .key-new { text-align: left; }
+    .spine-cell.old { text-decoration: none; }
+  }
 
   /* SVG icons — abundant per HIT50 rubric */
   .icon { display: inline-block; width: 32px; height: 32px; flex-shrink: 0; }
@@ -884,37 +977,63 @@
     <p class="spine-frame">
       The two-firm model was the right answer when HIT transformation was a once-a-decade event. It's no longer the right answer when transformation is continuous and the board is grading the run, not the design. The category is shifting from <em style="font-style:normal;font-weight:600;">Specialist HIT</em> (strategy here, execution there) to <em style="font-style:normal;font-weight:600;">Unified Healthcare IT</em> (one firm covering both).
     </p>
-    <table class="spine-table">
-      <thead>
-        <tr>
-          <th class="old">Specialist HIT <span style="font-weight:500;opacity:0.6;text-transform:none;letter-spacing:0;">(2010 — when it worked)</span></th>
-          <th class="center">What matters now</th>
-          <th class="new">Unified Healthcare IT <span style="font-weight:500;opacity:0.7;text-transform:none;letter-spacing:0;">(the next decade)</span></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="old">Strategy by one firm, execution by another</td>
-          <td class="center">Accountability</td>
-          <td class="new">One firm, one P&amp;L</td>
-        </tr>
-        <tr>
-          <td class="old">The handoff between firms</td>
-          <td class="center">Failure point</td>
-          <td class="new">No handoff — same team designs and runs</td>
-        </tr>
-        <tr>
-          <td class="old">Different KPIs at design vs. delivery</td>
-          <td class="center">Continuity</td>
-          <td class="new">Shared outcomes through the lifecycle</td>
-        </tr>
-        <tr>
-          <td class="old">"We delivered the strategy" / "We executed the plan"</td>
-          <td class="center">Proof on each side</td>
-          <td class="new">22 years advisory + 4 years #1 KLAS execution</td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Column key strip -->
+    <div class="spine-keys">
+      <div class="key key-old">Specialist HIT <span class="key-meta">(2010 — when it worked)</span></div>
+      <div class="key key-mid">What matters now</div>
+      <div class="key key-new">Unified Healthcare IT <span class="key-meta">(the next decade)</span></div>
+    </div>
+
+    <!-- The rows — OLD card · DIMENSION fulcrum · NEW card. Hover lights up the dimension. -->
+    <div class="spine-rows">
+      <div class="spine-row">
+        <div class="spine-cell old">Strategy by one firm, execution by another</div>
+        <div class="spine-dim">
+          <div class="dim-icon">
+            <!-- Scales icon — Accountability -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M3 7h18"/><path d="M7 7l-3 7a4 4 0 0 0 8 0L9 7"/><path d="M17 7l-3 7a4 4 0 0 0 8 0l-3-7"/></svg>
+          </div>
+          <div class="dim-label">Accountability</div>
+        </div>
+        <div class="spine-cell new">One firm, one P&amp;L</div>
+      </div>
+
+      <div class="spine-row">
+        <div class="spine-cell old">The handoff between firms</div>
+        <div class="spine-dim">
+          <div class="dim-icon">
+            <!-- Alert-triangle icon — Failure point -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="dim-label">Failure point</div>
+        </div>
+        <div class="spine-cell new">No handoff — same team designs and runs</div>
+      </div>
+
+      <div class="spine-row">
+        <div class="spine-cell old">Different KPIs at design vs. delivery</div>
+        <div class="spine-dim">
+          <div class="dim-icon">
+            <!-- Link icon — Continuity -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <div class="dim-label">Continuity</div>
+        </div>
+        <div class="spine-cell new">Shared outcomes through the lifecycle</div>
+      </div>
+
+      <div class="spine-row">
+        <div class="spine-cell old">"We delivered the strategy" / "We executed the plan"</div>
+        <div class="spine-dim">
+          <div class="dim-icon">
+            <!-- Award icon — Proof on each side -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+          </div>
+          <div class="dim-label">Proof on each side</div>
+        </div>
+        <div class="spine-cell new">22 years advisory + 4 years #1 KLAS execution</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1151,7 +1270,7 @@
     const revealSelectors = [
       '.who-item',
       '.problem h2', '.problem .lead', '.problem .cost-stats .stat', '.shift', '.problem .synthesis',
-      '.spine-block h2', '.spine-block .spine-frame', '.spine-table',
+      '.spine-block h2', '.spine-block .spine-frame', '.spine-keys',
       '.solutions h2', '.solutions .frame', '.service',
       '.case h2', '.case blockquote', '.case .klas-badges .badge',
       '.plan h2', '.step',
@@ -1278,19 +1397,19 @@
     });
   })();
 
-  // 1f. Spine table rows staggered reveal on scroll-into-view
+  // 1f. Spine rows staggered reveal on scroll-into-view
   (function() {
-    const tbl = document.querySelector('.spine-table');
-    if (!tbl) return;
+    const rows = document.querySelector('.spine-rows');
+    if (!rows) return;
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach(e => {
-          if (e.isIntersecting) { tbl.classList.add('rows-in'); io.unobserve(tbl); }
+          if (e.isIntersecting) { rows.classList.add('rows-in'); io.unobserve(rows); }
         });
-      }, { threshold: 0.25 });
-      io.observe(tbl);
+      }, { threshold: 0.2 });
+      io.observe(rows);
     } else {
-      tbl.classList.add('rows-in');
+      rows.classList.add('rows-in');
     }
   })();
 
