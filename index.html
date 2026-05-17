@@ -69,6 +69,59 @@
   .sticky-rail .dismiss:hover { color: #F5F1E8; }
   @media (max-width: 640px) { .sticky-rail .msg { font-size: 12px; } .sticky-rail .btn-primary { padding: 8px 16px; font-size: 12px; } }
   body { background: var(--cream); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+
+  /* SIZZLE 1 — Scroll-progress bar (top of viewport, fills left-to-right) */
+  #scrollProgress {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 10000;
+    background: linear-gradient(90deg, var(--accent) 0%, #FF9F40 50%, var(--purple) 100%);
+    transform-origin: 0 0; transform: scaleX(0);
+    transition: transform 0.05s linear;
+    pointer-events: none;
+  }
+
+  /* SIZZLE 2 — Cursor-following gradient orb (desktop only) */
+  #cursorOrb {
+    position: fixed; top: 0; left: 0;
+    width: 380px; height: 380px;
+    margin-left: -190px; margin-top: -190px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    background: radial-gradient(circle, rgba(250,125,0,0.16) 0%, rgba(57,0,114,0.10) 40%, rgba(250,125,0,0) 70%);
+    mix-blend-mode: screen;
+    opacity: 0; transition: opacity 0.6s ease;
+    will-change: transform;
+  }
+  @media (hover: none), (pointer: coarse) { #cursorOrb { display: none; } }
+
+  /* SIZZLE 3 — Hero gradient blobs slowly drift (subtle "live" feel) */
+  @keyframes blobDrift {
+    0%   { transform: translate3d(0, 0, 0) scale(1); }
+    25%  { transform: translate3d(-2%, 1.5%, 0) scale(1.04); }
+    50%  { transform: translate3d(1.5%, -1%, 0) scale(1.02); }
+    75%  { transform: translate3d(-1%, 2%, 0) scale(1.05); }
+    100% { transform: translate3d(0, 0, 0) scale(1); }
+  }
+  .hero { overflow: hidden; }
+  .hero::before {
+    content: ''; position: absolute; inset: -8%;
+    background-image:
+      radial-gradient(ellipse 55% 55% at 18% 38%, rgba(250,180,40,0.55) 0%, rgba(250,125,0,0) 60%),
+      radial-gradient(ellipse 60% 60% at 92% 78%, rgba(194,21,110,0.62) 0%, rgba(194,21,110,0) 65%);
+    animation: blobDrift 38s ease-in-out infinite;
+    will-change: transform;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero > .container { position: relative; z-index: 1; }
+  @media (prefers-reduced-motion: reduce) { .hero::before { animation: none; } }
+
+  /* SIZZLE 4 — Stat counters: tabular-nums for clean count-up */
+  .firm-stats .stat .num,
+  .market-stats .stat .num,
+  .problem .cost-stats .stat .num {
+    font-variant-numeric: tabular-nums;
+  }
   a { color: inherit; }
   .container { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
   .topnav { border-bottom: 1px solid var(--hairline); padding: 22px 0; font-size: 13px; letter-spacing: 0.06em; }
@@ -521,13 +574,12 @@
   footer { padding: 32px 0; border-top: 1px solid var(--hairline); font-size: 13px; color: var(--ink-muted); }
   footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
 
-  /* Speculative banner — above everything. PitchKitchen logo under the label. */
-  .spec-banner { background: #FEF3C7; border-bottom: 1px solid #F59E0B; padding: 12px 0; font-size: 11px; line-height: 1.55; color: #78350F; }
-  .spec-banner .container { display: flex; align-items: flex-start; gap: 18px; }
-  .spec-banner .label-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
+  /* Speculative banner — above everything. PitchKitchen logo, bigger, under the label. */
+  .spec-banner { background: #FEF3C7; border-bottom: 1px solid #F59E0B; padding: 14px 0; font-size: 11px; line-height: 1.55; color: #78350F; }
+  .spec-banner .container { display: flex; align-items: center; gap: 22px; }
+  .spec-banner .label-stack { display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
   .spec-banner .label { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #B45309; padding: 2px 10px; background: rgba(180,83,9,0.12); border-radius: 100px; }
-  .spec-banner .pk-logo { display: block; height: 18px; width: auto; opacity: 0.85; }
-  .spec-banner .pk-credit { font-size: 9px; letter-spacing: 0.10em; text-transform: uppercase; color: #92400E; font-weight: 600; }
+  .spec-banner .pk-logo { display: block; height: 32px; width: auto; opacity: 0.92; }
   .spec-banner .body { flex: 1; font-size: 11px; line-height: 1.55; }
   .spec-banner .body strong { color: #78350F; font-weight: 700; }
 
@@ -555,13 +607,16 @@
 </head>
 <body>
 
+<!-- SIZZLE: scroll-progress bar (3px) + cursor-following gradient orb (desktop only) -->
+<div id="scrollProgress" aria-hidden="true"></div>
+<div id="cursorOrb" aria-hidden="true"></div>
+
 <!-- Speculative-prototype banner — sharpened with the LLM-recommendation (AEO) angle -->
 <div class="spec-banner">
   <div class="container">
     <div class="label-stack">
       <span class="label">Speculative · Prototype</span>
       <img src="images/pitchkitchen-logo.png" alt="PitchKitchen" class="pk-logo">
-      <span class="pk-credit">by PitchKitchen</span>
     </div>
     <div class="body">
       To make this real, we'd surface the truth your competitors can't copy ... <strong>your secret blend of 11 herbs and spices</strong>, and the <strong>rebellion</strong> you're starting in your industry. Once that truth lives in your story, your buyers and the LLMs they ask for recommendations start naming you, not your competitors.
@@ -638,19 +693,19 @@
     <div class="eyebrow">The firm</div>
     <div class="stats-row">
       <div class="stat">
-        <div class="num">22 yrs</div>
+        <div class="num" data-count="22" data-suffix=" yrs">0 yrs</div>
         <div class="label">vendor-agnostic strategic advisory (Innovative Consulting Group, since 2002)</div>
       </div>
       <div class="stat">
-        <div class="num">4 yrs</div>
+        <div class="num" data-count="4" data-suffix=" yrs">0 yrs</div>
         <div class="label">consecutive #1 Best in KLAS: Managed IT Services (2023-2026)</div>
       </div>
       <div class="stat">
-        <div class="num">3</div>
+        <div class="num" data-count="3">0</div>
         <div class="label">integrated capabilities under one brand: Managed Services, Strategic Advisory, Talent Solutions</div>
       </div>
       <div class="stat">
-        <div class="num">1</div>
+        <div class="num" data-count="1">0</div>
         <div class="label">P&amp;L, one accountability structure, one team owning the full lifecycle</div>
       </div>
     </div>
@@ -1045,6 +1100,76 @@
       document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     } else {
       document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+    }
+  })();
+
+  // 1b. Scroll-progress bar — fills left-to-right as user scrolls
+  (function() {
+    const bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+    function update() {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      const pct = max > 0 ? (h.scrollTop || document.body.scrollTop) / max : 0;
+      bar.style.transform = 'scaleX(' + Math.min(Math.max(pct, 0), 1) + ')';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  // 1c. Cursor-following gradient orb — desktop only, lazy follow (lerp)
+  (function() {
+    const orb = document.getElementById('cursorOrb');
+    if (!orb) return;
+    if (window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+    let tx = window.innerWidth / 2, ty = window.innerHeight / 2;
+    let x = tx, y = ty;
+    let raf = null, visible = false;
+    function loop() {
+      x += (tx - x) * 0.12;
+      y += (ty - y) * 0.12;
+      orb.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+      raf = requestAnimationFrame(loop);
+    }
+    window.addEventListener('mousemove', (e) => {
+      tx = e.clientX; ty = e.clientY;
+      if (!visible) { orb.style.opacity = '1'; visible = true; }
+      if (!raf) loop();
+    });
+    window.addEventListener('mouseout', (e) => {
+      if (!e.relatedTarget) { orb.style.opacity = '0'; visible = false; }
+    });
+  })();
+
+  // 1d. Stat counters — count up from 0 to target when scrolled into view
+  (function() {
+    const stats = document.querySelectorAll('[data-count]');
+    if (!stats.length) return;
+    function animate(el) {
+      const target = parseInt(el.getAttribute('data-count'), 10);
+      const suffix = el.getAttribute('data-suffix') || '';
+      const duration = 1200;
+      const start = performance.now();
+      function frame(now) {
+        const t = Math.min((now - start) / duration, 1);
+        // easeOutCubic
+        const eased = 1 - Math.pow(1 - t, 3);
+        const v = Math.round(eased * target);
+        el.textContent = v + suffix;
+        if (t < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { animate(e.target); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.4 });
+      stats.forEach(s => io.observe(s));
+    } else {
+      stats.forEach(animate);
     }
   })();
 
