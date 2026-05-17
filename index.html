@@ -1133,6 +1133,18 @@
     }
   })();
 
+  // 1a. Sticky-nav scrolled state — adds .scrolled class once user moves past spec banner
+  (function() {
+    const nav = document.querySelector('.topnav');
+    if (!nav) return;
+    function update() {
+      if (window.scrollY > 24) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+
   // 1b. Scroll-progress bar — fills left-to-right as user scrolls
   (function() {
     const bar = document.getElementById('scrollProgress');
