@@ -666,6 +666,65 @@
   .case .klas-badges .badge .who { font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600; letter-spacing: 0.04em; }
   @media (max-width: 768px) { .case .klas-badges { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
 
+  /* EMPATHIZER STRIP — standing rubric pattern (lower-mid scroll).
+     The guide expressing empathy with the hero. One sentence. Visual break.
+     Templates: "You shouldn't have to..." | "Your organization deserves..." |
+     "You should be able to (X) without (Y)." */
+  .empathizer {
+    position: relative;
+    padding: 100px 0;
+    background: linear-gradient(135deg, rgba(57,0,114,0.05) 0%, rgba(250,125,0,0.04) 100%);
+    overflow: hidden;
+    text-align: center;
+    border-top: 1px solid rgba(220,214,200,0.6);
+    border-bottom: 1px solid rgba(220,214,200,0.6);
+  }
+  .empathizer::before {
+    content: ''; position: absolute; inset: -25%;
+    background:
+      radial-gradient(circle 560px at 14% 50%, rgba(194,21,110,0.16) 0%, rgba(194,21,110,0) 60%),
+      radial-gradient(circle 580px at 86% 50%, rgba(250,180,40,0.14) 0%, rgba(250,180,40,0) 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .empathizer .container { position: relative; z-index: 1; max-width: 900px; }
+  .empathizer .label {
+    font-family: var(--sans);
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    font-weight: 800; color: var(--purple);
+    margin-bottom: 26px;
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid rgba(57,0,114,0.25);
+    border-radius: 100px;
+    background: rgba(255,255,255,0.5);
+  }
+  .empathizer .quote {
+    font-family: var(--serif);
+    font-size: 40px;
+    line-height: 1.28;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .empathizer .quote em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .empathizer .signed {
+    font-family: var(--sans);
+    font-size: 13px; letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    margin-top: 28px;
+    font-style: italic;
+  }
+  @media (max-width: 768px) {
+    .empathizer { padding: 64px 0; }
+    .empathizer .quote { font-size: 26px; }
+  }
+
   /* 9. PLAN (customer-verb steps — v1.2 mandatory) */
   .plan { padding: 96px 0; }
   .plan .section-eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 16px; }
@@ -802,6 +861,7 @@
       <a href="#solutions">Solutions</a>
       <a href="#proof">Proof</a>
       <a href="#how">How It Works</a>
+      <a href="#industry-leadership">Industry Leadership</a>
       <a class="nav-cta" href="#contact">Book a Discussion →</a>
     </div>
   </div>
@@ -1160,6 +1220,15 @@
         <div class="you-receive">You receive: board-defensible outcomes and the same team next year.</div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- EMPATHIZER STRIP — the guide's empathy moment, between proof and plan -->
+<section class="empathizer">
+  <div class="container">
+    <div class="label">Between us</div>
+    <p class="quote">You shouldn't have to be the <em>bridge</em> between your strategy firm and your execution firm.</p>
+    <p class="signed">From the team that thinks one accountability table is the only way this works.</p>
   </div>
 </section>
 
