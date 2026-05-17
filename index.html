@@ -124,10 +124,24 @@
   }
   a { color: inherit; }
   .container { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
-  .topnav { border-bottom: 1px solid var(--hairline); padding: 22px 0; font-size: 13px; letter-spacing: 0.06em; }
+  /* TOP NAV — sticky, target logo as big as practical (standing rubric rule) */
+  .topnav {
+    border-bottom: 1px solid var(--hairline);
+    padding: 20px 0; font-size: 13px; letter-spacing: 0.06em;
+    position: sticky; top: 0; z-index: 500;
+    background: rgba(245, 241, 232, 0.92);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    transition: padding 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .topnav.scrolled {
+    padding: 12px 0;
+    background: rgba(245, 241, 232, 0.96);
+    box-shadow: 0 2px 18px rgba(20, 10, 36, 0.10);
+  }
   .topnav .container { display: flex; align-items: center; justify-content: space-between; }
-  /* Logo bigger — everybody loves their own logo (Greg's directive) */
-  .brand img { display: block; height: 56px; width: auto; }
+  /* Big target logo — standing Rubric 3 rule: as big as practical (Greg's 2026-05-16 directive) */
+  .brand img { display: block; height: 80px; width: auto; transition: height 0.2s ease; }
+  .topnav.scrolled .brand img { height: 52px; }
   /* Nav links uppercased — institutional weight */
   .nav-links a { margin-left: 28px; text-decoration: none; color: var(--ink-muted); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.18s; }
   .nav-links a:hover { color: var(--accent); }
@@ -516,25 +530,41 @@
   .plan { padding: 96px 0; }
   .plan .section-eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 16px; }
   .plan h2 { font-family: var(--serif); font-size: 40px; line-height: 1.15; letter-spacing: -0.014em; margin: 0 0 40px 0; font-weight: 700; max-width: 760px; }
-  /* Process layout: 3 steps with connector lines between them */
-  .steps { display: grid; grid-template-columns: 1fr 60px 1fr 60px 1fr; gap: 0; align-items: stretch; }
+  /* Process map: icon-circles connected by lines + arrowheads, all aligned to icon-circle centers */
+  .steps { display: grid; grid-template-columns: 1fr 100px 1fr 100px 1fr; gap: 0; align-items: start; }
   .step { padding: 0 12px; }
+  /* Connector spans the full 100px gap, vertically centered on the icon-circle (60px tall, center at 30px) */
   .step-connector {
-    display: flex; align-items: flex-start; justify-content: center;
-    padding-top: 28px;
     position: relative;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .step-connector::before {
-    content: ''; display: block; height: 2px; width: 100%; background: var(--accent);
-    margin-top: 30px;
-    background-image: linear-gradient(to right, rgba(250,125,0,0.35) 0%, rgba(250,125,0,1) 50%, rgba(250,125,0,0.35) 100%);
+    content: '';
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right,
+      rgba(250,125,0,0.4) 0%,
+      rgba(250,125,0,1) 25%,
+      rgba(250,125,0,1) 75%,
+      rgba(250,125,0,0.4) 100%);
+    border-radius: 2px;
   }
   .step-connector::after {
-    content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
-    width: 0; height: 0; margin-top: 1px;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-left: 12px solid var(--accent);
+    /* Arrowhead at right edge pointing into next circle */
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    border-left: 13px solid var(--accent);
+    filter: drop-shadow(0 0 6px rgba(250,125,0,0.4));
   }
   @media (max-width: 880px) {
     .steps { grid-template-columns: 1fr; gap: 28px; }
