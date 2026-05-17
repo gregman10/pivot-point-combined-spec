@@ -71,16 +71,18 @@
   body { background: var(--cream); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
   a { color: inherit; }
   .container { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
-  .topnav { border-bottom: 1px solid var(--hairline); padding: 18px 0; font-size: 13px; letter-spacing: 0.06em; }
+  .topnav { border-bottom: 1px solid var(--hairline); padding: 22px 0; font-size: 13px; letter-spacing: 0.06em; }
   .topnav .container { display: flex; align-items: center; justify-content: space-between; }
-  .brand img { display: block; height: 36px; width: auto; }
-  .nav-links a { margin-left: 26px; text-decoration: none; color: var(--ink-muted); font-weight: 600; font-size: 13px; letter-spacing: 0.04em; transition: color 0.18s; }
+  /* Logo bigger — everybody loves their own logo (Greg's directive) */
+  .brand img { display: block; height: 56px; width: auto; }
+  /* Nav links uppercased — institutional weight */
+  .nav-links a { margin-left: 28px; text-decoration: none; color: var(--ink-muted); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.18s; }
   .nav-links a:hover { color: var(--accent); }
   .nav-cta {
     display: inline-block; background: var(--accent); color: #FFFFFF;
-    padding: 10px 22px; border-radius: 100px;
-    margin-left: 26px; text-decoration: none;
-    font-weight: 600; font-size: 13px; letter-spacing: 0.02em;
+    padding: 11px 22px; border-radius: 100px;
+    margin-left: 28px; text-decoration: none;
+    font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
     transition: background 0.18s, transform 0.18s;
     box-shadow: 0 3px 12px rgba(250,125,0,0.28);
   }
@@ -103,8 +105,10 @@
                       url('images/hero-pivot-combined.jpg');
     background-size: cover;
     background-position: center;
+    background-attachment: fixed;
     color: #F5F1E8;
   }
+  @media (pointer:coarse) { .hero { background-attachment: scroll; } }
   .hero .eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-warm); font-weight: 700; margin-bottom: 32px; }
   .hero h1 { font-family: var(--serif); font-size: 72px; line-height: 1.02; letter-spacing: -0.022em; font-weight: 700; margin: 0 0 28px 0; max-width: 960px; color: #F8F5EE; }
   .hero .deck { font-size: 20px; line-height: 1.55; color: rgba(245,241,232,0.86); max-width: 720px; margin: 0 0 40px 0; }
@@ -430,7 +434,7 @@
       url('images/parallax-3.jpg');
   }
 
-  /* 8. NAMED CASE — ChatGPT photo + brand-gradient signature overlay (magenta + orange + deep purple) */
+  /* 8. NAMED CASE — ChatGPT photo + brand-gradient signature overlay (magenta + orange + deep purple), parallax */
   .case {
     position: relative;
     padding: 96px 0;
@@ -442,7 +446,9 @@
       url('images/case.jpg');
     background-size: cover;
     background-position: center;
+    background-attachment: fixed;
   }
+  @media (pointer:coarse) { .case { background-attachment: scroll; } }
   .case .section-eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #FFB066; font-weight: 700; margin-bottom: 20px; }
   .case h2 { font-family: var(--serif); font-size: 38px; line-height: 1.2; letter-spacing: -0.012em; margin: 0 0 32px 0; font-weight: 700; max-width: 820px; }
   .case blockquote { margin: 0 0 36px 0; padding: 0; font-family: var(--serif); font-size: 28px; line-height: 1.4; max-width: 880px; font-weight: 500; }
@@ -457,7 +463,30 @@
   .plan { padding: 96px 0; }
   .plan .section-eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 16px; }
   .plan h2 { font-family: var(--serif); font-size: 40px; line-height: 1.15; letter-spacing: -0.014em; margin: 0 0 40px 0; font-weight: 700; max-width: 760px; }
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  /* Process layout: 3 steps with connector lines between them */
+  .steps { display: grid; grid-template-columns: 1fr 60px 1fr 60px 1fr; gap: 0; align-items: stretch; }
+  .step { padding: 0 12px; }
+  .step-connector {
+    display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 28px;
+    position: relative;
+  }
+  .step-connector::before {
+    content: ''; display: block; height: 2px; width: 100%; background: var(--accent);
+    margin-top: 30px;
+    background-image: linear-gradient(to right, rgba(250,125,0,0.35) 0%, rgba(250,125,0,1) 50%, rgba(250,125,0,0.35) 100%);
+  }
+  .step-connector::after {
+    content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    width: 0; height: 0; margin-top: 1px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 12px solid var(--accent);
+  }
+  @media (max-width: 880px) {
+    .steps { grid-template-columns: 1fr; gap: 28px; }
+    .step-connector { display: none; }
+  }
   .step .num { font-family: var(--serif); font-size: 56px; line-height: 1; font-weight: 700; color: var(--navy); margin-bottom: 14px; display: block; }
   .step h3 { font-family: var(--serif); font-size: 26px; line-height: 1.2; margin: 0 0 12px 0; font-weight: 700; }
   .step p { font-size: 15px; line-height: 1.65; color: var(--ink-muted); margin: 0 0 12px 0; }
@@ -863,6 +892,7 @@
         <p>You book a 20-minute discussion. We map your current strategy-to-execution flow against four years of #1 KLAS Managed IT data and surface where the handoff is costing you.</p>
         <div class="you-receive">You receive: a written diagnosis of your handoff cost ... before any engagement begins.</div>
       </div>
+      <div class="step-connector" aria-hidden="true"></div>
       <div class="step">
         <div class="icon-wrap"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
         <span class="num">02</span>
@@ -870,6 +900,7 @@
         <p>You choose the integrated capability set you need ... strategic advisory, managed IT, EHR work, talent, or all of them. Pivot Point fields a senior team that stays through stabilization.</p>
         <div class="you-receive">You receive: a single contract, a single P&amp;L, a single line of accountability.</div>
       </div>
+      <div class="step-connector" aria-hidden="true"></div>
       <div class="step">
         <div class="icon-wrap"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></div>
         <span class="num">03</span>
