@@ -16,14 +16,32 @@
     --ink: #141414;
     --ink-muted: #5B5750;
     --hairline: #DCD6C8;
-    --navy: #1B2A41;
-    --accent: #B84A1C;
-    --accent-warm: #E5A05B;
+    /* PIVOT POINT'S OWN BRAND COLORS (extracted from their logo) */
+    --navy: #390072;          /* Pivot Point's deep purple — was navy */
+    --purple: #390072;        /* explicit alias */
+    --purple-light: #5A1FA0;  /* lighter purple for hover/gradient */
+    --accent: #FA7D00;        /* Pivot Point's orange — was burnt orange */
+    --accent-warm: #FFB066;   /* warmer orange for highlights */
     --bad: #9B2C2C;
     --good: #166534;
     /* Modern all-sans system: Montserrat across the board */
     --sans: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    --serif: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; /* legacy var alias — same family now */
+    --serif: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  /* Subtle radial gradient overlays — modern, bleeding off, used as overlays per Greg's directive */
+  .grad-bleed { position: relative; isolation: isolate; }
+  .grad-bleed::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 12% 18%, rgba(57,0,114,0.07) 0%, rgba(57,0,114,0) 60%),
+      radial-gradient(ellipse 70% 60% at 92% 88%, rgba(250,125,0,0.08) 0%, rgba(250,125,0,0) 65%);
+  }
+  .grad-bleed > * { position: relative; z-index: 1; }
+  /* Dark-section gradient variant — overlay on top of dark photo/charcoal */
+  .grad-bleed-dark::before {
+    background:
+      radial-gradient(ellipse 60% 50% at 8% 12%, rgba(90,31,160,0.22) 0%, rgba(90,31,160,0) 60%),
+      radial-gradient(ellipse 70% 60% at 95% 92%, rgba(250,125,0,0.16) 0%, rgba(250,125,0,0) 65%);
   }
   body { font-family: var(--sans); font-weight: 400; }
   * { box-sizing: border-box; }
@@ -64,9 +82,9 @@
     margin-left: 26px; text-decoration: none;
     font-weight: 600; font-size: 13px; letter-spacing: 0.02em;
     transition: background 0.18s, transform 0.18s;
-    box-shadow: 0 3px 12px rgba(184,74,28,0.25);
+    box-shadow: 0 3px 12px rgba(250,125,0,0.28);
   }
-  .nav-cta:hover { background: #9B3F18; transform: translateY(-1px); color: #FFFFFF; }
+  .nav-cta:hover { background: #C56400; transform: translateY(-1px); color: #FFFFFF; }
 
   /* 1. HERO — full-bleed photo with dark overlay (HIT50 design system signature)
      Photo: ChatGPT-generated per HIT50 rubric, shallow DoF through glass conference room */
@@ -76,7 +94,12 @@
     display: flex;
     align-items: center;
     padding: 120px 0 96px 0;
-    background-image: linear-gradient(135deg, rgba(20,20,20,0.72) 0%, rgba(27,42,65,0.66) 100%),
+    /* Pivot Point's actual brand-gradient look: bold magenta + orange + deep purple blobs, bleeding off-canvas */
+    background-image:
+      radial-gradient(ellipse 55% 55% at 18% 38%, rgba(250,180,40,0.55) 0%, rgba(250,125,0,0.22) 35%, rgba(250,125,0,0) 60%),
+      radial-gradient(ellipse 60% 60% at 92% 78%, rgba(194,21,110,0.62) 0%, rgba(194,21,110,0.20) 40%, rgba(194,21,110,0) 65%),
+      radial-gradient(ellipse 80% 70% at 50% 50%, rgba(90,31,160,0.55) 0%, rgba(57,0,114,0.45) 50%, rgba(46,17,71,0.55) 100%),
+      linear-gradient(135deg, rgba(46,17,71,0.85) 0%, rgba(57,0,114,0.78) 100%),
                       url('images/hero-pivot-combined.jpg');
     background-size: cover;
     background-position: center;
@@ -94,9 +117,9 @@
     letter-spacing: 0.01em;
     transition: background 0.18s, transform 0.18s;
     display: inline-block; text-decoration: none;
-    box-shadow: 0 4px 16px rgba(184,74,28,0.25);
+    box-shadow: 0 4px 16px rgba(250,125,0,0.28);
   }
-  .btn-primary:hover { background: #9B3F18; transform: translateY(-1px); box-shadow: 0 6px 22px rgba(184,74,28,0.35); }
+  .btn-primary:hover { background: #C56400; transform: translateY(-1px); box-shadow: 0 6px 22px rgba(250,125,0,0.40); }
   .btn-secondary {
     background: transparent; color: #F5F1E8;
     padding: 14px 28px; border-radius: 100px;
@@ -117,7 +140,7 @@
     transition: background 0.18s;
     display: inline-block; text-decoration: none;
   }
-  .btn-secondary-light:hover { background: rgba(27,42,65,0.08); }
+  .btn-secondary-light:hover { background: rgba(57,0,114,0.08); }
 
   /* 2. MARKET-PROBLEM STATS (top strip — establishes urgency) */
   .market-stats { padding: 40px 0 32px 0; background: var(--paper); border-top: 1px solid var(--hairline); }
@@ -145,11 +168,22 @@
   .firm-stats .eyebrow { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted); font-weight: 700; margin-bottom: 24px; }
   .firm-stats .stats-row .stat .num { color: var(--navy); }
 
-  /* 5. PROBLEM — dark danger-zone treatment so it LOOKS like a problem, not features.
-     Greg's directive: "The problem section doesn't look like a problem section,
-     it looks like a freaking feature and benefit section. Treat that as a problem section visually." */
-  .problem { padding: 96px 0; background: #1F1A14; color: #F0E6D8; }
-  .problem .section-eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #E27272; font-weight: 700; margin-bottom: 18px; }
+  /* 5. PROBLEM — dark purple-charcoal with magenta/orange brand-gradient overlays
+     so it FEELS like the rest of the brand, not the old warm-charcoal palette */
+  .problem {
+    position: relative;
+    padding: 96px 0;
+    background:
+      radial-gradient(ellipse 55% 55% at 15% 18%, rgba(250,180,40,0.10) 0%, rgba(250,125,0,0) 60%),
+      radial-gradient(ellipse 60% 60% at 90% 85%, rgba(194,21,110,0.20) 0%, rgba(194,21,110,0) 65%),
+      radial-gradient(ellipse 80% 70% at 50% 50%, rgba(90,31,160,0.18) 0%, rgba(57,0,114,0) 70%),
+      #150A24;
+    color: #F0E6D8;
+    overflow: hidden;
+  }
+  .problem .container { position: relative; z-index: 1; }
+  /* Magenta is the warning color here — replaces brick red, ties to brand */
+  .problem .section-eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #FF7BB3; font-weight: 700; margin-bottom: 18px; }
   .problem h2 { font-family: var(--sans); font-size: 44px; line-height: 1.15; letter-spacing: -0.014em; margin: 0 0 24px 0; font-weight: 700; max-width: 820px; color: #F8F5EE; }
   .problem .lead { font-size: 19px; line-height: 1.55; color: rgba(240,230,216,0.85); max-width: 760px; margin: 0 0 40px 0; }
 
@@ -157,26 +191,43 @@
   .problem .cost-stats {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 28px; padding: 32px 0; margin-bottom: 48px;
-    border-top: 1px solid rgba(226,114,114,0.25);
-    border-bottom: 1px solid rgba(226,114,114,0.25);
+    border-top: 1px solid rgba(255,123,179,0.25);
+    border-bottom: 1px solid rgba(255,123,179,0.25);
   }
-  .problem .cost-stats .cost-eyebrow { grid-column: 1 / -1; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #E27272; font-weight: 700; margin-bottom: 4px; }
-  .problem .cost-stats .stat .num { font-family: var(--sans); font-size: 38px; font-weight: 800; color: #E27272; letter-spacing: -0.01em; margin-bottom: 6px; line-height: 1; }
+  .problem .cost-stats .cost-eyebrow { grid-column: 1 / -1; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #FF7BB3; font-weight: 700; margin-bottom: 4px; }
+  .problem .cost-stats .stat .num { font-family: var(--sans); font-size: 38px; font-weight: 800; color: #FFB066; letter-spacing: -0.01em; margin-bottom: 6px; line-height: 1; }
   .problem .cost-stats .stat .label { font-size: 13px; line-height: 1.5; color: rgba(240,230,216,0.72); }
 
   .shifts { display: grid; grid-template-columns: 1fr; gap: 16px; }
-  .shift { display: grid; grid-template-columns: 56px 1fr; gap: 22px; padding: 22px 24px; background: rgba(255,255,255,0.035); border-left: 3px solid #B94A4A; border-radius: 2px; }
-  .shift .num { font-family: var(--sans); font-size: 28px; font-weight: 800; color: #E27272; letter-spacing: -0.01em; line-height: 1; }
+  .shift {
+    display: grid; grid-template-columns: 72px 1fr; gap: 22px;
+    padding: 22px 24px;
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid #FF7BB3;
+    border-radius: 2px;
+  }
+  .shift .num-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .shift .hazard-icon {
+    width: 36px; height: 36px;
+    color: #FF7BB3;
+    background: rgba(255,123,179,0.10);
+    border: 1.5px solid rgba(255,123,179,0.40);
+    border-radius: 100px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .shift .hazard-icon svg { width: 18px; height: 18px; }
+  .shift .num { font-family: var(--sans); font-size: 22px; font-weight: 800; color: rgba(255,123,179,0.7); letter-spacing: 0.04em; line-height: 1; }
   .shift h3 { font-family: var(--sans); font-size: 20px; line-height: 1.3; margin: 0 0 8px 0; font-weight: 700; color: #F8F5EE; }
   .shift p { font-size: 15px; line-height: 1.6; color: rgba(240,230,216,0.75); margin: 0; }
   .problem .synthesis {
     margin-top: 40px; padding: 26px 30px;
-    background: rgba(226,114,114,0.10);
-    border-left: 3px solid #E27272;
+    background: rgba(250,125,0,0.12);
+    border-left: 3px solid #FA7D00;
     font-family: var(--sans); font-size: 22px; line-height: 1.4;
     max-width: 820px; font-weight: 700; color: #F8F5EE;
   }
-  .problem .synthesis em { font-style: normal; color: #E27272; }
+  .problem .synthesis em { font-style: normal; color: #FFB066; }
 
   /* 6. SPINE TABLE */
   .spine-block { padding: 96px 0; background: var(--paper); border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
@@ -197,13 +248,82 @@
   .icon { display: inline-block; width: 32px; height: 32px; flex-shrink: 0; }
   .icon-sm { width: 20px; height: 20px; }
   .icon-lg { width: 48px; height: 48px; }
-  .service .icon-wrap { width: 56px; height: 56px; border-radius: 100px; background: rgba(184,74,28,0.10); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+  .service .icon-wrap { width: 56px; height: 56px; border-radius: 100px; background: rgba(250,125,0,0.10); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
   .service .icon-wrap .icon { color: var(--accent); width: 28px; height: 28px; }
-  .step .icon-wrap { width: 60px; height: 60px; border-radius: 100px; background: rgba(27,42,65,0.08); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+  .step .icon-wrap { width: 60px; height: 60px; border-radius: 100px; background: rgba(57,0,114,0.08); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
   .step .icon-wrap .icon { color: var(--navy); width: 30px; height: 30px; }
   .stake .icon-wrap { width: 44px; height: 44px; border-radius: 100px; background: rgba(155,44,44,0.10); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
   .stake .icon-wrap .icon { color: var(--bad); width: 22px; height: 22px; }
   .btn-primary .icon, .btn-secondary .icon { width: 16px; height: 16px; margin-left: 6px; vertical-align: middle; position: relative; top: -1px; }
+
+  /* SOCIAL PROOF — rotating before/after testimonial strip
+     Greg's directive: add a one-sentence testimonial strip with before-state contrasting after-state,
+     rotate horizontally every few seconds. Three testimonials, draft text. */
+  .social-proof {
+    position: relative;
+    padding: 72px 0;
+    background: linear-gradient(180deg, var(--cream) 0%, #EDE7D7 100%);
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    overflow: hidden;
+  }
+  .social-proof::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 10% 50%, rgba(57,0,114,0.07) 0%, rgba(57,0,114,0) 60%),
+      radial-gradient(ellipse 50% 50% at 92% 50%, rgba(250,125,0,0.08) 0%, rgba(250,125,0,0) 65%);
+  }
+  .social-proof > * { position: relative; z-index: 1; }
+  .social-proof .eyebrow {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--purple); font-weight: 700; margin-bottom: 24px; text-align: center;
+  }
+  .testimonial-viewport {
+    max-width: 920px; margin: 0 auto; position: relative;
+    min-height: 180px;
+  }
+  .testimonial {
+    position: absolute; top: 0; left: 0; right: 0;
+    opacity: 0; transform: translateY(12px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    text-align: center;
+  }
+  .testimonial.active { opacity: 1; transform: translateY(0); position: relative; }
+  .testimonial .quote {
+    font-family: var(--sans); font-size: 24px; line-height: 1.45;
+    color: var(--ink); font-weight: 500; max-width: 820px;
+    margin: 0 auto 22px auto; letter-spacing: -0.01em;
+  }
+  .testimonial .ba-strip {
+    display: inline-flex; align-items: center; gap: 18px;
+    padding: 10px 22px;
+    background: var(--paper);
+    border: 1px solid var(--hairline);
+    border-radius: 100px;
+    box-shadow: 0 2px 10px rgba(57,0,114,0.06);
+    margin-bottom: 16px;
+  }
+  .testimonial .ba-strip .before { color: var(--bad); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+  .testimonial .ba-strip .arrow { color: var(--ink-muted); font-size: 14px; font-weight: 700; }
+  .testimonial .ba-strip .after { color: var(--good); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+  .testimonial cite {
+    font-style: normal; font-size: 13px; color: var(--ink-muted);
+    font-weight: 600; letter-spacing: 0.04em; display: block;
+  }
+  .testimonial-dots {
+    display: flex; justify-content: center; gap: 10px; margin-top: 32px;
+  }
+  .testimonial-dots button {
+    width: 8px; height: 8px; border-radius: 100px;
+    background: var(--hairline); border: none; padding: 0;
+    cursor: pointer; transition: background 0.2s, transform 0.2s;
+  }
+  .testimonial-dots button.active { background: var(--purple); transform: scale(1.4); }
+  .testimonial-dots button:hover { background: var(--purple-light); }
+  @media (max-width: 768px) {
+    .testimonial .quote { font-size: 18px; }
+    .testimonial-viewport { min-height: 240px; }
+  }
 
   /* 7. SERVICES (cards with Outcome lines, Eisner Amper Flex B pattern) */
   .solutions { padding: 96px 0; }
@@ -228,7 +348,7 @@
     box-shadow: 0 16px 48px rgba(20,20,20,0.10), 0 4px 12px rgba(20,20,20,0.06);
     border-top-color: var(--accent);
   }
-  .service:hover .icon-wrap { background: rgba(184,74,28,0.16); }
+  .service:hover .icon-wrap { background: rgba(250,125,0,0.20); }
   .service:hover .learn-more svg { transform: translateX(4px); }
   .service .learn-more {
     margin-top: auto; padding-top: 18px;
@@ -238,7 +358,7 @@
     transition: color 0.18s;
   }
   .service .learn-more svg { width: 16px; height: 16px; transition: transform 0.25s cubic-bezier(0.2,0.8,0.2,1); }
-  .service .learn-more:hover { color: #9B3F18; }
+  .service .learn-more:hover { color: #C56400; }
   .service h3 { font-family: var(--serif); font-size: 22px; line-height: 1.25; margin: 0 0 10px 0; font-weight: 700; }
   .service p { font-size: 15px; line-height: 1.6; color: var(--ink-muted); margin: 0 0 14px 0; }
   .service .outcome { padding: 12px 14px; background: rgba(22,101,52,0.08); border-left: 3px solid var(--good); font-size: 13px; line-height: 1.5; color: var(--good); font-weight: 600; }
@@ -285,31 +405,45 @@
     z-index: 1;
   }
 
-  /* Variant backgrounds — all ChatGPT-generated per HIT50 rubric (shallow DoF through glass conference rooms) */
+  /* Variant backgrounds — ChatGPT photos overlaid with Pivot Point's actual brand-gradient signature
+     (bold magenta + orange + deep purple radial blobs, bleeding off-canvas) */
   .parallax-cta.bg-1 {
-    background-image: linear-gradient(135deg, rgba(20,20,20,0.72) 0%, rgba(27,42,65,0.68) 100%),
-                      url('images/parallax-1.jpg');
+    background-image:
+      radial-gradient(ellipse 50% 55% at 14% 28%, rgba(250,180,40,0.50) 0%, rgba(250,125,0,0) 60%),
+      radial-gradient(ellipse 55% 60% at 88% 80%, rgba(194,21,110,0.55) 0%, rgba(194,21,110,0) 60%),
+      linear-gradient(135deg, rgba(46,17,71,0.86) 0%, rgba(57,0,114,0.78) 100%),
+      url('images/parallax-1.jpg');
   }
   .parallax-cta.bg-2 {
-    background-image: linear-gradient(135deg, rgba(20,20,20,0.68) 0%, rgba(27,42,65,0.72) 100%),
-                      url('images/parallax-2.jpg');
+    background-image:
+      radial-gradient(ellipse 55% 60% at 80% 25%, rgba(250,180,40,0.48) 0%, rgba(250,125,0,0) 60%),
+      radial-gradient(ellipse 60% 60% at 12% 80%, rgba(194,21,110,0.52) 0%, rgba(194,21,110,0) 60%),
+      linear-gradient(135deg, rgba(57,0,114,0.84) 0%, rgba(46,17,71,0.80) 100%),
+      url('images/parallax-2.jpg');
   }
   .parallax-cta.bg-3 {
-    background-image: linear-gradient(135deg, rgba(27,42,65,0.74) 0%, rgba(20,20,20,0.70) 100%),
-                      url('images/parallax-3.jpg');
+    background-image:
+      radial-gradient(ellipse 60% 60% at 50% 18%, rgba(250,180,40,0.45) 0%, rgba(250,125,0,0) 60%),
+      radial-gradient(ellipse 55% 55% at 88% 88%, rgba(194,21,110,0.55) 0%, rgba(194,21,110,0) 60%),
+      radial-gradient(ellipse 50% 50% at 10% 75%, rgba(90,31,160,0.55) 0%, rgba(90,31,160,0) 65%),
+      linear-gradient(135deg, rgba(46,17,71,0.88) 0%, rgba(57,0,114,0.82) 100%),
+      url('images/parallax-3.jpg');
   }
 
-  /* 8. NAMED CASE — ChatGPT-generated CIO portrait per HIT50 rubric */
+  /* 8. NAMED CASE — ChatGPT photo + brand-gradient signature overlay (magenta + orange + deep purple) */
   .case {
     position: relative;
     padding: 96px 0;
     color: var(--paper);
-    background-image: linear-gradient(135deg, rgba(20,20,20,0.78) 0%, rgba(27,42,65,0.74) 100%),
-                      url('images/case.jpg');
+    background-image:
+      radial-gradient(ellipse 55% 55% at 12% 22%, rgba(250,180,40,0.42) 0%, rgba(250,125,0,0) 60%),
+      radial-gradient(ellipse 60% 60% at 92% 85%, rgba(194,21,110,0.50) 0%, rgba(194,21,110,0) 65%),
+      linear-gradient(135deg, rgba(46,17,71,0.86) 0%, rgba(57,0,114,0.80) 100%),
+      url('images/case.jpg');
     background-size: cover;
     background-position: center;
   }
-  .case .section-eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #FBA94A; font-weight: 700; margin-bottom: 20px; }
+  .case .section-eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #FFB066; font-weight: 700; margin-bottom: 20px; }
   .case h2 { font-family: var(--serif); font-size: 38px; line-height: 1.2; letter-spacing: -0.012em; margin: 0 0 32px 0; font-weight: 700; max-width: 820px; }
   .case blockquote { margin: 0 0 36px 0; padding: 0; font-family: var(--serif); font-size: 28px; line-height: 1.4; max-width: 880px; font-weight: 500; }
   .case cite { font-style: normal; font-size: 14px; color: rgba(255,255,255,0.72); font-weight: 600; letter-spacing: 0.04em; }
@@ -358,11 +492,14 @@
   footer { padding: 32px 0; border-top: 1px solid var(--hairline); font-size: 13px; color: var(--ink-muted); }
   footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
 
-  /* Speculative banner — above everything */
-  .spec-banner { background: #FEF3C7; border-bottom: 1px solid #F59E0B; padding: 14px 0; font-size: 13px; line-height: 1.55; color: #78350F; }
-  .spec-banner .container { display: flex; align-items: flex-start; gap: 14px; }
-  .spec-banner .label { flex-shrink: 0; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #B45309; padding: 2px 10px; background: rgba(180,83,9,0.12); border-radius: 100px; }
-  .spec-banner .body { flex: 1; }
+  /* Speculative banner — above everything. PitchKitchen logo under the label. */
+  .spec-banner { background: #FEF3C7; border-bottom: 1px solid #F59E0B; padding: 12px 0; font-size: 11px; line-height: 1.55; color: #78350F; }
+  .spec-banner .container { display: flex; align-items: flex-start; gap: 18px; }
+  .spec-banner .label-stack { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
+  .spec-banner .label { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #B45309; padding: 2px 10px; background: rgba(180,83,9,0.12); border-radius: 100px; }
+  .spec-banner .pk-logo { display: block; height: 18px; width: auto; opacity: 0.85; }
+  .spec-banner .pk-credit { font-size: 9px; letter-spacing: 0.10em; text-transform: uppercase; color: #92400E; font-weight: 600; }
+  .spec-banner .body { flex: 1; font-size: 11px; line-height: 1.55; }
   .spec-banner .body strong { color: #78350F; font-weight: 700; }
 
   @media (max-width: 768px) {
@@ -392,7 +529,11 @@
 <!-- Speculative-prototype banner — sharpened with the LLM-recommendation (AEO) angle -->
 <div class="spec-banner">
   <div class="container">
-    <span class="label">Speculative · Prototype</span>
+    <div class="label-stack">
+      <span class="label">Speculative · Prototype</span>
+      <img src="images/pitchkitchen-logo.png" alt="PitchKitchen" class="pk-logo">
+      <span class="pk-credit">by PitchKitchen</span>
+    </div>
     <div class="body">
       To make this real, we'd surface the truth your competitors can't copy ... <strong>your secret blend of 11 herbs and spices</strong>, and the <strong>rebellion</strong> you're starting in your industry. Once that truth lives in your story, your buyers and the LLMs they ask for recommendations start naming you, not your competitors.
     </div>
@@ -430,7 +571,7 @@
 <!-- WHO THIS IS FOR — compact strip right under hero, 3 personas with SVG icons -->
 <section class="who-strip">
   <div class="container">
-    <div class="eyebrow">Built for healthcare IT leaders who have lived the handoff</div>
+    <div class="eyebrow">Who we serve</div>
     <div class="who-grid">
       <div class="who-item">
         <div class="icon-circle">
@@ -438,7 +579,6 @@
         </div>
         <div>
           <h3>Hospital System CIOs</h3>
-          <p>Defending major HIT investments to the board.</p>
         </div>
       </div>
       <div class="who-item">
@@ -446,8 +586,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
         </div>
         <div>
-          <h3>VP / Director Applications</h3>
-          <p>Living the strategy-to-execution handoff cycle.</p>
+          <h3>VP / Director of Applications</h3>
         </div>
       </div>
       <div class="who-item">
@@ -456,7 +595,6 @@
         </div>
         <div>
           <h3>CMIOs &amp; Clinical Informatics</h3>
-          <p>Carrying clinician adoption after handoff.</p>
         </div>
       </div>
     </div>
@@ -468,7 +606,7 @@
 <!-- 3. FIRM-CREDIBILITY STATS (second strip — authority) -->
 <section class="firm-stats">
   <div class="container">
-    <div class="eyebrow">The combined Pivot Point Consulting</div>
+    <div class="eyebrow">The firm</div>
     <div class="stats-row">
       <div class="stat">
         <div class="num">22 yrs</div>
@@ -508,35 +646,50 @@
 
     <div class="shifts">
       <div class="shift">
-        <div class="num">01</div>
+        <div class="num-wrap">
+          <div class="hazard-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+          <div class="num">01</div>
+        </div>
         <div>
           <h3>Strategy lives in one deck. Execution lives in another firm.</h3>
           <p>The advisory firm builds the strategy and walks away. The execution firm picks it up and starts interpreting. The original outcomes get translated by people who weren't in the design conversations.</p>
         </div>
       </div>
       <div class="shift">
-        <div class="num">02</div>
+        <div class="num-wrap">
+          <div class="hazard-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="num">02</div>
+        </div>
         <div>
           <h3>Senior names sell. Junior teams deliver.</h3>
           <p>By month four, the senior partners who sold the engagement are rarely on the project. The junior team brings the work to market without the strategic context the seniors had.</p>
         </div>
       </div>
       <div class="shift">
-        <div class="num">03</div>
+        <div class="num-wrap">
+          <div class="hazard-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+          <div class="num">03</div>
+        </div>
         <div>
           <h3>Mid-engagement staff rotation resets six months of institutional knowledge.</h3>
           <p>Consultants rotate off. Your team re-onboards new ones. The original design conversations have to be re-explained. Six months evaporates per cycle.</p>
         </div>
       </div>
       <div class="shift">
-        <div class="num">04</div>
+        <div class="num-wrap">
+          <div class="hazard-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="num">04</div>
+        </div>
         <div>
           <h3>When transformations go wrong, vendors point at each other.</h3>
           <p>Strategy firm says "we delivered the deck." Execution firm says "we executed what was given to us." The CIO is left holding both bills and the failure.</p>
         </div>
       </div>
       <div class="shift">
-        <div class="num">05</div>
+        <div class="num-wrap">
+          <div class="hazard-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+          <div class="num">05</div>
+        </div>
         <div>
           <h3>The board can't tell who's accountable.</h3>
           <p>Twelve months in, the board asks for outcomes. The CIO can't show the strategy firm's deliverables AND the execution firm's outputs as one coherent transformation. The accountability gap is structural, not operational.</p>
@@ -551,7 +704,7 @@
 <!-- Parallax CTA #1 — visual breath after the heavy Problem section, with a primary CTA centered -->
 <section class="parallax-cta bg-1" data-photo-note="PHOTOGRAPHY PLACEHOLDER: shallow depth of field, looking through glass walls of a hospital boardroom, executives mid-conversation, warm interior light. ChatGPT-generated per HIT50 rubric.">
   <div class="container">
-    <div class="eyebrow">If any of those 5 shifts landed</div>
+    <div class="eyebrow">Take 20</div>
     <h2>The conversation about your handoff is the next step.</h2>
     <p>Twenty minutes. No deck. We map your current strategy-to-execution flow against the four-year #1 KLAS Managed IT pattern and tell you exactly where the handoff is costing you.</p>
     <div class="cta-row">
@@ -563,7 +716,7 @@
 <!-- 6. SPINE TABLE -->
 <section class="spine-block" id="shift">
   <div class="container">
-    <div class="section-eyebrow">The category shift</div>
+    <div class="section-eyebrow">The shift</div>
     <h2>The old way of buying HIT transformation is ending. Here's the new one.</h2>
     <p class="spine-frame">
       Healthcare IT is maturing. As operating margins tighten and the transformation cadence accelerates, hospital boards are no longer willing to pay for strategy and execution as separate purchases — they're paying for transformations that land. The category shift is from Fractured Healthcare IT to Unified Healthcare IT.
@@ -602,10 +755,51 @@
   </div>
 </section>
 
+<!-- SOCIAL PROOF — rotating before/after testimonial strip (draft testimonials, marked as such) -->
+<section class="social-proof" aria-label="Testimonials">
+  <div class="container">
+    <div class="eyebrow">Testimonials <span style="opacity:0.6;font-weight:500;text-transform:none;letter-spacing:0.04em;">(illustrative)</span></div>
+    <div class="testimonial-viewport" id="testimonialViewport">
+      <div class="testimonial active" data-idx="0">
+        <div class="ba-strip">
+          <span class="before">Before: two firms pointing at each other</span>
+          <span class="arrow">→</span>
+          <span class="after">After: one accountability table</span>
+        </div>
+        <p class="quote">"We finally have one team in the room for both the strategy review and the go-live war room ... the meeting where the firms used to blame each other simply doesn't exist anymore."</p>
+        <cite>— CIO, Academic Medical Center (illustrative)</cite>
+      </div>
+      <div class="testimonial" data-idx="1">
+        <div class="ba-strip">
+          <span class="before">Before: senior names sold, juniors delivered</span>
+          <span class="arrow">→</span>
+          <span class="after">After: the senior team that designed it ran it</span>
+        </div>
+        <p class="quote">"The partner who wrote our roadmap was still on the standup call eighteen months later. That's the first time that's ever happened to us."</p>
+        <cite>— SVP Information Services, Children's Health System (illustrative)</cite>
+      </div>
+      <div class="testimonial" data-idx="2">
+        <div class="ba-strip">
+          <span class="before">Before: 50% scope overrun, board fatigue</span>
+          <span class="arrow">→</span>
+          <span class="after">After: board approved the next phase in one meeting</span>
+        </div>
+        <p class="quote">"My CFO used to ask why every quarter. Now she asks what's next. Same firm, same data, no translation layer between strategy and execution."</p>
+        <cite>— CIO, Safety-Net Health System (illustrative)</cite>
+      </div>
+    </div>
+    <div class="testimonial-dots" id="testimonialDots">
+      <button class="active" data-target="0" aria-label="Testimonial 1"></button>
+      <button data-target="1" aria-label="Testimonial 2"></button>
+      <button data-target="2" aria-label="Testimonial 3"></button>
+    </div>
+  </div>
+</section>
+
 <!-- 7. SERVICES (cards with explicit Outcome lines, Flex B pattern) -->
 <section class="solutions" id="services">
   <div class="container">
-    <div class="section-eyebrow">What we do</div>
+    <div class="section-eyebrow">Services</div>
     <h2>Three integrated capabilities. One accountability structure.</h2>
     <p class="frame">
       The combined Pivot Point Consulting brings strategy, execution, and talent under one brand. Each capability is designed to operate continuously with the others — no handoff, no re-onboarding, no finger-pointing.
@@ -639,7 +833,7 @@
 <!-- 8. NAMED CASE / MID-PAGE PROOF (dark navy section) -->
 <section class="case">
   <div class="container">
-    <div class="section-eyebrow">What hundreds of CIOs told KLAS</div>
+    <div class="section-eyebrow">The proof</div>
     <h2>The proof on the execution side is the only consecutive #1 KLAS streak in the industry.</h2>
     <blockquote>
       "They're the only consulting firm we've worked with where the senior team didn't disappear after month two."
@@ -655,24 +849,24 @@
   </div>
 </section>
 
-<!-- 9. PLAN (CUSTOMER-VERB steps, v1.2 mandatory) -->
+<!-- 9. PLAN — three real customer actions in sequence (Book → Choose → Run) -->
 <section class="plan" id="plan">
   <div class="container">
-    <div class="section-eyebrow">How it works</div>
+    <div class="section-eyebrow">The Plan</div>
     <h2>Three steps. No handoff. No fire drills.</h2>
     <div class="steps">
       <div class="step">
-        <div class="icon-wrap"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg></div>
+        <div class="icon-wrap"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
         <span class="num">01</span>
-        <h3>Stop.</h3>
-        <p>You stop hiring two firms for one transformation. The strategy firm and the execution firm are the same team. They share the outcome you commit to.</p>
-        <div class="you-receive">You receive: one accountability table for the whole transformation.</div>
+        <h3>Book.</h3>
+        <p>You book a 20-minute discussion. We map your current strategy-to-execution flow against four years of #1 KLAS Managed IT data and surface where the handoff is costing you.</p>
+        <div class="you-receive">You receive: a written diagnosis of your handoff cost ... before any engagement begins.</div>
       </div>
       <div class="step">
         <div class="icon-wrap"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
         <span class="num">02</span>
         <h3>Choose.</h3>
-        <p>You choose the integrated capability set you need ... strategic advisory, managed IT, EHR work, talent, or all of them. Pivot Point fields a senior team that stays.</p>
+        <p>You choose the integrated capability set you need ... strategic advisory, managed IT, EHR work, talent, or all of them. Pivot Point fields a senior team that stays through stabilization.</p>
         <div class="you-receive">You receive: a single contract, a single P&amp;L, a single line of accountability.</div>
       </div>
       <div class="step">
@@ -689,9 +883,9 @@
 <!-- Parallax CTA #2 — between Plan and Outcomes, momentum check -->
 <section class="parallax-cta bg-2" data-photo-note="PHOTOGRAPHY PLACEHOLDER: shallow DoF through glass into a working conference room, CIO + advisor reviewing screens, late afternoon light. ChatGPT-generated per HIT50 rubric.">
   <div class="container">
-    <div class="eyebrow">You don't need the full plan to start</div>
+    <div class="eyebrow">One call</div>
     <h2>You need the conversation about the handoff that's costing you.</h2>
-    <p>Stop. Choose. Run. The three steps work in order. The first one starts on a 20-minute call where we map your current state against four years of #1 KLAS Managed IT data.</p>
+    <p>Book. Choose. Run. The three steps work in order. The first one starts on a 20-minute call where we map your current state against four years of #1 KLAS Managed IT data.</p>
     <div class="cta-row">
       <a class="btn-primary" href="#contact">Book a Discussion →</a>
     </div>
@@ -701,7 +895,7 @@
 <!-- 10. OUTCOME / PROMISED LAND (iMethods Flex A emotional pattern) -->
 <section class="outcome">
   <div class="container">
-    <div class="section-eyebrow">What this looks like when it works</div>
+    <div class="section-eyebrow">Outcomes</div>
     <h2>A year after we start, your board doesn't ask for explanations.</h2>
     <ul>
       <li><strong>Strategy and execution share one P&amp;L.</strong> <em>The firm you hired to design the transformation is the same one you hired to run it.</em></li>
@@ -717,7 +911,7 @@
 <!-- 11. STAKES (Eisner Amper Flex B — researched data per point) -->
 <section class="stakes">
   <div class="container">
-    <div class="section-eyebrow">If nothing changes</div>
+    <div class="section-eyebrow">The stakes</div>
     <h2>The cost of staying with fractured HIT.</h2>
     <div class="stakes-grid">
       <div class="stake">
@@ -757,7 +951,7 @@
 <!-- 12. CLOSING CTA — upgraded to parallax dark-photo bookend, with both primary + secondary CTAs -->
 <section class="parallax-cta bg-3" id="contact" data-photo-note="PHOTOGRAPHY PLACEHOLDER: shallow DoF through glass conference room walls, end-of-day light, post-meeting calm. ChatGPT-generated per HIT50 rubric.">
   <div class="container">
-    <div class="eyebrow">Stop the handoff. Start the conversation.</div>
+    <div class="eyebrow">Get started</div>
     <h2>Stop hiring two firms for one HIT transformation.</h2>
     <p>Open a 20-minute discussion with the only firm bringing 22 years of strategic advisory AND four consecutive #1 KLAS Best in KLAS Managed IT years under one accountability structure.</p>
     <div class="cta-row">
@@ -822,7 +1016,35 @@
     }
   })();
 
-  // 2. Sticky rail visibility — show once hero is mostly out of view
+  // 2. Testimonial carousel — auto-rotate every 5.5s, with manual dots
+  (function() {
+    const viewport = document.getElementById('testimonialViewport');
+    const dotsWrap = document.getElementById('testimonialDots');
+    if (!viewport || !dotsWrap) return;
+    const slides = viewport.querySelectorAll('.testimonial');
+    const dots = dotsWrap.querySelectorAll('button');
+    let current = 0;
+    let timer = null;
+    function show(idx) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      current = idx;
+    }
+    function next() { show((current + 1) % slides.length); }
+    function start() { timer = setInterval(next, 5500); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    dots.forEach(d => {
+      d.addEventListener('click', () => {
+        const idx = parseInt(d.getAttribute('data-target'), 10);
+        stop(); show(idx); start();
+      });
+    });
+    viewport.addEventListener('mouseenter', stop);
+    viewport.addEventListener('mouseleave', start);
+    start();
+  })();
+
+  // 3. Sticky rail visibility — show once hero is mostly out of view
   (function() {
     const rail = document.getElementById('stickyRail');
     if (!rail) return;
